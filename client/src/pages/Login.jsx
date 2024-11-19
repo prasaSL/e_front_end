@@ -1,8 +1,45 @@
 import React from 'react';
 import { Box, Container, TextField, Button, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch,useSelector } from "react-redux";
+import { signInStart,signInSuccess,signInFailure } from "../redux/user/userSlice";
 
 export default function Login() {
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.user);
+    const {loading,error} = user;
+    const navigate = useNavigate();
+
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        dispatch(signInStart());
+
+
+
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/auth/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ email, password }),
+          });
+
+            if (!response.ok) {
+                dispatch(signInFailure());
+                return;
+            }
+
+            const data = await response.json();
+            dispatch(signInSuccess(data));
+            navigate("/");
+
+    }
+
+
   return (
     <Container maxWidth="sm">
       <Box
@@ -46,6 +83,7 @@ export default function Login() {
           <Button
             type="submit"
             fullWidth
+            onClick={handleLogin}
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
@@ -58,6 +96,8 @@ export default function Login() {
               alignItems: 'center',
               mt: 2,
             }}
+
+
           >
            
           </Box>

@@ -34,26 +34,34 @@ export default function ProductAddNew() {
     const formData = new FormData();
     formData.append("thumbnailIndex", thumbnail); // Add thumbnail index
     formData.append("name", document.getElementById("name").value); // Add product name
-    formData.append("price", document.getElementById("price").value); // Add product price
+    formData.append("quantity", document.getElementById("QTY").value); // Add product price
     formData.append("description", document.getElementById("description").value); // Add product description
+    formData.append("sku", document.getElementById("sku").value); // Add product SKU
+   
 
     images.forEach((image) => {
       formData.append("images", image.file); // Add all image files
     });
 
     try {
-      const token = localStorage.getItem("token"); // Retrieve token from localStorage
-      const response = await fetch("/api/products", {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/products/register`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         body: formData,
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error("Failed to save product.");
       }
       alert("Product saved successfully!");
+
+        // Clear form fields and images
+        document.getElementById("name").value = "";
+        document.getElementById("QTY").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("sku").value = "";
+        setImages([]);
+        setThumbnail(null);
+        fileInputRef.current.value = null;
       console.log("Response:", response.data);
     } catch (error) {
       console.error("Error saving product:", error);
@@ -147,10 +155,10 @@ export default function ProductAddNew() {
                 <input className="form-input form-control" type="text" id="name" name="name" />
               </td>
               <td>
-                <label className="form-label1" htmlFor="price">Price</label>
+                <label className="form-label1" htmlFor="price">QTY</label>
               </td>
               <td>
-                <input className="form-input form-control" type="text" id="price" name="price" />
+                <input className="form-input form-control" type="text" id="QTY" name="QTY" />
               </td>
             </tr>
           </tbody>
