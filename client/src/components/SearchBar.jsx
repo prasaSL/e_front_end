@@ -1,5 +1,4 @@
 import { Button, InputBase, Paper } from "@mui/material";
-import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import StarIcon from '@mui/icons-material/Star';
@@ -70,6 +69,9 @@ export default function SearchBar() {
 
         <Button
           variant="outlined" // Use outlined variant to show border
+          onClick={() => {
+            navigate("/favorites");
+          }}
           sx={{
             borderColor: "#001EB9",
             color: "#001EB9", // Set text color to match border
