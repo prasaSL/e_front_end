@@ -1,5 +1,5 @@
-import { Box, Breadcrumbs, Container, Typography, Button } from "@mui/material";
 import React, { useRef, useState } from "react";
+import { Box, Breadcrumbs, Container, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
@@ -14,12 +14,51 @@ export default function ProductAddNew() {
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
-    const imageUrls = files.map(file => URL.createObjectURL(file));
-    setImages(prevImages => [...prevImages, ...imageUrls]);
+    const newImages = files.map((file) => ({
+      file, // Store file object for backend submission
+      preview: URL.createObjectURL(file), // Generate preview URL for display
+    }));
+    setImages((prevImages) => [...prevImages, ...newImages]);
   };
 
   const handleSetThumbnail = (index) => {
     setThumbnail(index);
+  };
+
+  const handleSaveProduct = async () => {
+    if (thumbnail === null) {
+      alert("Please select a thumbnail image.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("thumbnailIndex", thumbnail); // Add thumbnail index
+    formData.append("name", document.getElementById("name").value); // Add product name
+    formData.append("price", document.getElementById("price").value); // Add product price
+    formData.append("description", document.getElementById("description").value); // Add product description
+
+    images.forEach((image) => {
+      formData.append("images", image.file); // Add all image files
+    });
+
+    try {
+      const token = localStorage.getItem("token"); // Retrieve token from localStorage
+      const response = await fetch("/api/products", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error("Failed to save product.");
+      }
+      alert("Product saved successfully!");
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Error saving product:", error);
+      alert("Failed to save product. Please try again.");
+    }
   };
 
   const breadcrumbs = [
@@ -158,7 +197,7 @@ export default function ProductAddNew() {
           <Box mt={2} sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
             {images.map((image, index) => (
               <Box key={index} sx={{ position: 'relative' }}>
-                <img src={image} alt={`Uploaded ${index}`} style={{ width: '100px', height: '100px' }} />
+                <img src={image.preview} alt={`Uploaded ${index}`} style={{ width: '100px', height: '100px' }} />
                 <Button
                   variant="contained"
                   size="small"
@@ -177,6 +216,14 @@ export default function ProductAddNew() {
             ))}
           </Box>
         </Box>
+        <Button
+          type="button"
+          variant="contained"
+          sx={{ mt: 3 }}
+          onClick={handleSaveProduct}
+        >
+          Save Product
+        </Button>
       </form>
     </Container>
   );

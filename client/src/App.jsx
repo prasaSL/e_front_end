@@ -18,6 +18,7 @@ function App() {
       <Route path="/favorites" element={<Favorites/>} />
       <Route path="/product/add-new" element={<ProductAddNew/>} />
       <Route path="/login" element={<Login/>} />
+      <Route path="*" element={<h1>Not Found</h1>} />
       
       </Routes>
     </BrowserRouter>

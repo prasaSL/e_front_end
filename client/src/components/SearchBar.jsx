@@ -3,8 +3,10 @@ import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import StarIcon from '@mui/icons-material/Star';
+import { useNavigate } from "react-router-dom";
 
 export default function SearchBar() {
+  const navigate = useNavigate();
   return (
     <div style={{ display: 'flex', alignItems: 'center', width: '100%' , justifyContent: "space-between"}}>
     <Paper
@@ -54,6 +56,11 @@ export default function SearchBar() {
             paddingRight: "30px",
             boxShadow: "none",
             fontSize: "19px",
+
+            }}
+
+            onClick={() => {
+              navigate("/product/add-new");
 
             }}
             className="me-3"
