@@ -3,9 +3,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import StarIcon from '@mui/icons-material/Star';
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function SearchBar() {
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+    }
+  };
   return (
     <div style={{ display: 'flex', alignItems: 'center', width: '100%' , justifyContent: "space-between"}}>
     <Paper
@@ -27,9 +35,11 @@ export default function SearchBar() {
           placeholder="Search..."
           fullWidth
           sx={{ ml: 1, flex: 1 }}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
         <Button
           variant="contained"
+          onClick={handleSearch}
           sx={{
             backgroundColor: "#001EB9",
             color: "white",
