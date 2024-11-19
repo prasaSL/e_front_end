@@ -22,11 +22,15 @@ const userSlice = createSlice({
         signInFailure : (state) => {
             state.loading = false;
            
-        }
+        },
+        updateFavorites: (state, action) => {
+              state.currentUser.user.favorites = action.payload;
+            
+          },
  }
 });
 
-export const { signInStart, signInSuccess, signInFailure } = userSlice.actions;
+export const { signInStart, signInSuccess, signInFailure ,updateFavorites} = userSlice.actions;
 
 export default userSlice.reducer;
 

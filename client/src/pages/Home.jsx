@@ -1,16 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchBar from '../components/SearchBar'
 import { Box, Container, hexToRgb, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 import DataTable from '../components/DataTable';
 export default function Home() {
+  const [rows, setRows] = useState();
+  useEffect(() => {
+   getProducts();
+  }, []);
+
+ const getProducts = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/products`);
+      const data = await response.json();
+      setRows(data.products);
+      console.log(data.products);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
 
   
-  const [rows, setRows] = useState([
-    {id:1, sku: '12345', image: 'https://drive.google.com/file/d/13M-k-2o9i3yFreFAix5Npo3bIuQlTSxE/view?usp=drive_link', imageLink: 'https://drive.google.com/file/d/13M-k-2o9i3yFreFAix5Npo3bIuQlTSxE/view?usp=drive_link', name: 'Product 1', price: '$10' },
-    {id:2, sku: '67890', image: 'https://drive.google.com/file/d/13M-k-2o9i3yFreFAix5Npo3bIuQlTSxE/view?usp=drive_link', imageLink: 'https://drive.google.com/file/d/13M-k-2o9i3yFreFAix5Npo3bIuQlTSxE/view?usp=drive_link', name: 'Product 2', price: '$20' },
-    // Add more rows as needed
-  ]);
+
 
   const handleSearch = (searchTerm) => {
     const filteredRows = rows.filter((row) => {

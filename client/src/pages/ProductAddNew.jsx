@@ -37,6 +37,7 @@ export default function ProductAddNew() {
     formData.append("quantity", document.getElementById("QTY").value); // Add product price
     formData.append("description", document.getElementById("description").value); // Add product description
     formData.append("sku", document.getElementById("sku").value); // Add product SKU
+    formData.append("price", document.getElementById("price").value); // Add product price
    
 
     images.forEach((image) => {
@@ -59,6 +60,7 @@ export default function ProductAddNew() {
         document.getElementById("QTY").value = "";
         document.getElementById("description").value = "";
         document.getElementById("sku").value = "";
+        document.getElementById("price").value = "";
         setImages([]);
         setThumbnail(null);
         fileInputRef.current.value = null;
@@ -145,6 +147,12 @@ export default function ProductAddNew() {
               </td>
               <td>
                 <input className="form-input form-control" type="text" id="sku" name="sku" />
+              </td>
+              <td>
+                <label className="form-label1" htmlFor="price">price</label>
+              </td>
+              <td>
+                <input className="form-input form-control" type="text" id="price" name="price" />
               </td>
             </tr>
             <tr>
